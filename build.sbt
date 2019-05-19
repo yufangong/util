@@ -17,12 +17,11 @@ val jacksonVersion = "2.9.8"
 val guavaLib = "com.google.guava" % "guava" % "19.0"
 val caffeineLib = "com.github.ben-manes.caffeine" % "caffeine" % "2.3.4"
 val jsr305Lib = "com.google.code.findbugs" % "jsr305" % "2.0.1"
-val scalacheckLib = "org.scalacheck" %% "scalacheck" % "1.13.4" % "test"
+val scalacheckLib = "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
 val slf4jApi = "org.slf4j" % "slf4j-api" % slf4jVersion
 
 val defaultProjectSettings = Seq(
-  scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.11.12", "2.12.8")
+  scalaVersion := "2.13.0-RC1"
 )
 
 val baseSettings = Seq(
@@ -34,7 +33,7 @@ val baseSettings = Seq(
     // See https://www.scala-sbt.org/0.13/docs/Testing.html#JUnit
     "com.novocode" % "junit-interface" % "0.11" % "test",
     "org.mockito" % "mockito-all" % "1.10.19" % "test",
-    "org.scalatest" %% "scalatest" % "3.0.0" % "test"
+    "org.scalatest" %% "scalatest" % "3.0.8-RC2" % "test"
   ),
 
   ScoverageKeys.coverageHighlighting := true,
@@ -216,7 +215,7 @@ lazy val utilCore = Project(
     caffeineLib % "test",
     scalacheckLib,
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"
+    "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
   ),
   resourceGenerators in Compile += Def.task {
     val projectName = name.value
@@ -379,7 +378,7 @@ lazy val utilTest = Project(
 ).settings(
   name := "util-test",
   libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest" % "3.0.0",
+    "org.scalatest" %% "scalatest" % "3.0.8-RC2",
     "org.mockito" % "mockito-all" % "1.10.19"
   )
 ).dependsOn(utilCore, utilLogging)

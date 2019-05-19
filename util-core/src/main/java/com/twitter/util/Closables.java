@@ -51,7 +51,7 @@ public final class Closables {
    */
   public static Closable sequence(Closable... closables) {
     return Closable$.MODULE$.sequence(
-      scala.collection.mutable.WrappedArray$.MODULE$.make(closables)
+      scala.collection.mutable.ArraySeq$.MODULE$.<Closable>make(closables).toSeq()
     );
   }
 

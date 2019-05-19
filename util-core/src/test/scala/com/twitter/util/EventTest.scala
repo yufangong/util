@@ -12,7 +12,7 @@ class EventTest extends FunSuite {
 
   test("pub/sub while active") {
     val e = Event[Int]()
-    val ref = new AtomicReference[Seq[Int]](Seq.empty)
+    val ref = new AtomicReference[Array[Int]](Array.empty)
     val sub = e.build.register(Witness(ref))
 
     assert(ref.get == Seq.empty)
@@ -33,7 +33,7 @@ class EventTest extends FunSuite {
       calls.incrementAndGet()
       p % 2 == 0
     }
-    val ref = new AtomicReference[Seq[Int]](Seq.empty)
+    val ref = new AtomicReference[Array[Int]](Array.empty)
     evens.build.register(Witness(ref))
 
     e.notify(1)
@@ -53,7 +53,7 @@ class EventTest extends FunSuite {
       p * 2
     }
 
-    val ref = new AtomicReference[Seq[Int]](Seq.empty)
+    val ref = new AtomicReference[Array[Int]](Array.empty)
     mapped.build.register(Witness(ref))
 
     e.notify(1)
@@ -64,7 +64,7 @@ class EventTest extends FunSuite {
   test("Event.collect") {
     val e = Event[Int]()
     val events = e collect { case i if i % 2 == 0 => i * 2 }
-    val ref = new AtomicReference[Seq[Int]](Seq.empty)
+    val ref = new AtomicReference[Array[Int]](Array.empty)
     events.build.register(Witness(ref))
 
     e.notify(1)
@@ -148,7 +148,7 @@ class EventTest extends FunSuite {
       e2
     }
 
-    val ref = new AtomicReference(Seq.empty[Int])
+    val ref = new AtomicReference(Array.empty[Int])
     val closable = e12.build.register(Witness(ref))
     assert(ref.get == Seq(1))
     assert(n == 2)
@@ -160,7 +160,7 @@ class EventTest extends FunSuite {
     val e1 = Event[Int]()
     val e2 = Event[String]()
     val e = e1 select e2
-    val ref = new AtomicReference[Seq[Either[Int, String]]](Seq.empty)
+    val ref = new AtomicReference[Array[Either[Int, String]]](Array.empty)
     e.build.register(Witness(ref))
     assert(ref.get.isEmpty)
 
@@ -177,7 +177,7 @@ class EventTest extends FunSuite {
     val e1 = Event[Int]()
     val e2 = Event[String]()
     val e = e1 zip e2
-    val ref = new AtomicReference[Seq[(Int, String)]](Seq.empty)
+    val ref = new AtomicReference[Array[(Int, String)]](Array.empty)
     e.build.register(Witness(ref))
 
     for (i <- 0 until 50) e1.notify(i)
@@ -209,7 +209,7 @@ class EventTest extends FunSuite {
   test("Event.take") {
     val e = Event[Int]()
     val e1 = e.take(5)
-    val ref = new AtomicReference[Seq[Int]](Seq.empty)
+    val ref = new AtomicReference[Array[Int]](Array.empty)
     e1.build.register(Witness(ref))
 
     e.notify(1)
@@ -227,7 +227,7 @@ class EventTest extends FunSuite {
   test("Event.merge") {
     val e1, e2 = Event[Int]()
     val e = e1 merge e2
-    val ref = new AtomicReference[Seq[Int]](Seq.empty)
+    val ref = new AtomicReference[Array[Int]](Array.empty)
     e.build.register(Witness(ref))
 
     for (i <- 0 until 100) e1.notify(i)
@@ -244,7 +244,7 @@ class EventTest extends FunSuite {
     val e = Event[Int]()
     val v = Var(0, e)
 
-    val ref = new AtomicReference[Seq[Int]](Seq.empty)
+    val ref = new AtomicReference[Array[Int]](Array.empty)
     v.changes.build.register(Witness(ref))
 
     for (i <- 1 until 100) e.notify(i)
@@ -330,7 +330,7 @@ class EventTest extends FunSuite {
 
   test("Event.dedupWith") {
     val e = Event[Int]()
-    val ref = new AtomicReference[IndexedSeq[Int]]
+    val ref = new AtomicReference[Array[Int]]
 
     e.dedupWith { (a, b) =>
         a >= b
@@ -350,7 +350,7 @@ class EventTest extends FunSuite {
 
   test("Event.dedup") {
     val e = Event[Int]()
-    val ref = new AtomicReference[IndexedSeq[Int]]
+    val ref = new AtomicReference[Array[Int]]
 
     e.dedup.build.register(Witness(ref))
     e.notify(0)

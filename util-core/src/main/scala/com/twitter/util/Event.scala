@@ -3,7 +3,7 @@ package com.twitter.util
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
 import scala.annotation.tailrec
-import scala.collection.generic.CanBuild
+import scala.collection.Factory
 import scala.collection.immutable.Queue
 import scala.language.higherKinds
 
@@ -308,9 +308,9 @@ trait Event[+T] { self =>
    * builder. A value containing the current version of the collection
    * is notified for each incoming event.
    */
-  def build[U >: T, That](implicit cbf: CanBuild[U, That]): Event[That] = new Event[That] {
+  def build[U >: T, That](implicit cbf: Factory[U, That]): Event[That] = new Event[That] {
     def register(s: Witness[That]): Closable = {
-      val b = cbf()
+      val b = cbf.newBuilder
       self.respond { t =>
         b += t
         s.notify(b.result())

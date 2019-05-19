@@ -29,7 +29,7 @@ object Throwables {
   def mkString(ex: Throwable): Seq[String] = {
     @tailrec def rec(ex: Throwable, buf: ArrayBuffer[String]): Seq[String] = {
       if (ex eq null)
-        buf.result
+        buf.toSeq
       else
         rec(ex.getCause, buf += ex.getClass.getName)
     }

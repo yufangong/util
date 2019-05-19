@@ -127,7 +127,7 @@ private[util] class BatchExecutor[In, Out](
 
     () =>
       try {
-        executeBatch(prevBatch)
+        executeBatch(prevBatch.toSeq)
       } catch {
         case e: Throwable =>
           log.log(WARNING, "unhandled exception caught in Future.batched: %s".format(e.toString), e)

@@ -8,7 +8,7 @@ trait Pool[A] {
 }
 
 class SimplePool[A](items: mutable.Queue[Future[A]]) extends Pool[A] {
-  def this(initialItems: Seq[A]) = this {
+  def this(initialItems: collection.Seq[A]) = this {
     val queue = new mutable.Queue[Future[A]]
     queue ++= initialItems.map(Future(_))
     queue
@@ -61,16 +61,16 @@ private class HealthyQueue[A](makeItem: () => Future[A], numItems: Int, isHealth
     this += makeItem()
   }
 
-  override def +=(elem: Future[A]): HealthyQueue.this.type = synchronized {
-    super.+=(elem)
+  override def addOne(elem: Future[A]): HealthyQueue.this.type = synchronized {
+    super.addOne(elem)
   }
 
-  override def +=:(elem: Future[A]): HealthyQueue.this.type = synchronized {
-    super.+=:(elem)
+  override def prepend(elem: Future[A]): HealthyQueue.this.type = synchronized {
+    super.prepend(elem)
   }
 
-  override def enqueue(elems: Future[A]*): Unit = synchronized {
-    super.enqueue(elems: _*)
+  override def enqueue(elems: Future[A]): HealthyQueue.this.type = synchronized {
+    super.enqueue(elems)
   }
 
   override def dequeue(): Future[A] = synchronized {

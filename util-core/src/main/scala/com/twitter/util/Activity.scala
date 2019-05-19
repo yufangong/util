@@ -1,8 +1,7 @@
 package com.twitter.util
 
 import java.util.{List => JList}
-
-import scala.collection.generic.CanBuild
+import scala.collection.{BuildFrom, Factory}
 import scala.collection.JavaConverters._
 import scala.collection.mutable.Buffer
 import scala.language.higherKinds
@@ -186,7 +185,7 @@ object Activity {
   def collect[T: ClassTag, CC[X] <: Traversable[X]](
     acts: CC[Activity[T]]
   )(
-    implicit newBuilder: CanBuild[T, CC[T]]
+    implicit newBuilder: BuildFrom[CC[Activity[T]], T, CC[T]]
   ): Activity[CC[T]] = {
     collect(acts, false)
   }
@@ -204,7 +203,7 @@ object Activity {
   def collectIndependent[T: ClassTag, CC[X] <: Traversable[X]](
     acts: CC[Activity[T]]
   )(
-    implicit newBuilder: CanBuild[T, CC[T]]
+    implicit newBuilder: BuildFrom[CC[Activity[T]], T, CC[T]]
   ): Activity[CC[T]] = {
     collect(acts, true)
   }
@@ -213,10 +212,10 @@ object Activity {
     acts: CC[Activity[T]],
     collectIndependent: Boolean
   )(
-    implicit newBuilder: CanBuild[T, CC[T]]
+    implicit newBuilder: BuildFrom[CC[Activity[T]], T, CC[T]]
   ): Activity[CC[T]] = {
     if (acts.isEmpty)
-      return Activity.value(newBuilder().result)
+      return Activity.value(newBuilder(acts).result())
 
     val states: Traversable[Var[State[T]]] = acts.map(_.run)
     val stateVar: Var[Traversable[State[T]]] = if (collectIndependent) {
@@ -238,7 +237,7 @@ object Activity {
         case Some(_) => assert(false)
       }
 
-      val ts = newBuilder()
+      val ts = newBuilder(acts)
       states foreach {
         case Ok(t) => ts += t
         case _ => assert(false)

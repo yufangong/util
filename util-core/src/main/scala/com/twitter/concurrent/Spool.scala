@@ -265,7 +265,7 @@ sealed trait Spool[+A] {
     foreach { a =>
       as += a
     } map { _ =>
-      as
+      as.toSeq
     }
   }
 

@@ -9,7 +9,7 @@ import org.scalatest.junit.JUnitRunner
 class ActivityTest extends FunSuite {
   test("Activity#flatMap") {
     val v = Var(Activity.Pending: Activity.State[Int])
-    val ref = new AtomicReference[Seq[Activity.State[Int]]]
+    val ref = new AtomicReference[Array[Activity.State[Int]]]
     val act = Activity(v) flatMap {
       case i if i % 2 == 0 => Activity.value(-i)
       case i => Activity.value(i)
@@ -45,7 +45,7 @@ class ActivityTest extends FunSuite {
 
   test("Activity#collect") {
     val v = Var(Activity.Pending: Activity.State[Int])
-    val ref = new AtomicReference(Seq.empty: Seq[Try[String]])
+    val ref = new AtomicReference(Array.empty: Array[Try[String]])
     val act = Activity(v) collect {
       case i if i % 2 == 0 => "EVEN%d".format(i)
     }
@@ -68,8 +68,16 @@ class ActivityTest extends FunSuite {
 
   test("Activity.collect") {
     val (acts, wits) = Seq.fill(10) { Activity[Int]() }.unzip
-    val ref = new AtomicReference(Seq.empty: Seq[Try[Seq[Int]]])
-    Activity.collect(acts).values.build.register(Witness(ref))
+    val ref = new AtomicReference(Array.empty: Array[Try[Seq[Int]]])
+
+    //Activity.collect(acts).values.build.register(Witness(ref))
+
+    //Error:(72, 35) ambiguous implicit values:
+    // both method iterableFactory in trait IterableFactory of type [A]=> scala.collection.Factory[A,Seq[A]]
+    // and method arrayFactory in object Factory of type [A](implicit evidence$1: scala.reflect.ClassTag[A])scala.collection.Factory[A,Array[A]]
+    // match expected type scala.collection.Factory[com.twitter.util.Try[Seq[Int]],That]
+    //    Activity.collect(acts).values.build.register(Witness(ref))
+    Activity.collect(acts).values.build[Try[Seq[Int]], Array[Try[Seq[Int]]]].register(Witness(ref))
 
     for ((w, i) <- wits.zipWithIndex) {
       assert(ref.get.isEmpty)
@@ -123,7 +131,7 @@ class ActivityTest extends FunSuite {
     val exc2 = new Exception("2")
     val exc3 = new Exception("3")
 
-    val ref = new AtomicReference(Seq.empty: Seq[Try[Int]])
+    val ref = new AtomicReference(Array.empty: Array[Try[Int]])
     val b = a map {
       case 111 => throw exc1
       case i => i
@@ -178,7 +186,7 @@ class ActivityTest extends FunSuite {
 
     val ab = Activity.join(a, b)
 
-    val ref = new AtomicReference[Seq[Activity.State[(Int, String)]]]
+    val ref = new AtomicReference[Array[Activity.State[(Int, String)]]]
     ab.states.build.register(Witness(ref))
 
     assert(ref.get == Seq(Activity.Pending))
@@ -206,7 +214,7 @@ class ActivityTest extends FunSuite {
     val a = Activity(v)
     val w = Witness(v)
 
-    val ref = new AtomicReference[Seq[Activity.State[Int]]]
+    val ref = new AtomicReference[Array[Activity.State[Int]]]
     a.stabilize.states.build.register(Witness(ref))
 
     assert(ref.get == Seq(Activity.Pending))

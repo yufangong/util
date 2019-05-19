@@ -264,7 +264,7 @@ class VarTest extends FunSuite with GeneratorDrivenPropertyChecks {
     val v2 = v1.map(_ * 2)
     val v = Var.collect(Seq(v1, v2)).map { case Seq(a, b) => (a, b) }
 
-    val ref = new AtomicReference[Seq[(Int, Int)]]
+    val ref = new AtomicReference[Array[(Int, Int)]]
     v.changes.build.register(Witness(ref))
 
     assert(ref.get == Seq((1, 2)))
@@ -458,7 +458,7 @@ class VarTest extends FunSuite with GeneratorDrivenPropertyChecks {
   test("Don't allow stale updates") {
     val a = Var(0)
 
-    val ref = new AtomicReference[Seq[(Int, Int)]]
+    val ref = new AtomicReference[Array[(Int, Int)]]
     (a join a).changes.build.register(Witness(ref))
 
     assert(ref.get == Seq((0, 0)))

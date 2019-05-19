@@ -143,7 +143,7 @@ trait Config[T] extends (() => T) {
           configMembers.collect {
             case symbol if symbol.isTerm && symbol.isSynthetic =>
               symbol.name.decodedName.toString
-          }(scala.collection.breakOut)
+          }.to(Set)
         }
         for (method <- nullaryMethods) {
           val name = method.getName

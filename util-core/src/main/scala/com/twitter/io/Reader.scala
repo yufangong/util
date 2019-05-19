@@ -168,7 +168,7 @@ object Reader {
     }
 
     def apply(in: Buf): Seq[Buf] = {
-      loop(ListBuffer(), in)
+      loop(ListBuffer().toSeq, in)
     }
   }
 
