@@ -2,7 +2,7 @@ package com.twitter.jvm
 
 import com.twitter.concurrent.NamedPoolThreadFactory
 import com.twitter.conversions.DurationOps._
-import com.twitter.util._
+import com.twitter.util.{Pool => _, _}
 import java.lang.management.ManagementFactory
 import java.util.concurrent.{ConcurrentHashMap, Executors, ScheduledExecutorService, TimeUnit}
 import java.util.logging.{Level, Logger}

@@ -1,7 +1,5 @@
 package com.twitter.util.logging
 
-import com.twitter.util.logging.Item._
-
 object Item extends Logging {
 
   def baz: String = {
@@ -17,6 +15,8 @@ class Item(val name: String, val description: String, size: Int) extends Logging
     info(s"Size = $size")
     if (size > 0) size else 0
   }
+
+  import com.twitter.util.logging.Item._
 
   def foo: String = {
     debug(s"name = $name, description = $description")

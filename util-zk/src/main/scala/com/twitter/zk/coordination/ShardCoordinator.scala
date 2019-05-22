@@ -99,8 +99,8 @@ class ShardCoordinator(zk: ZkClient, path: String, numShards: Int) {
   }
 
   private[this] def shardNodes(): Future[Seq[ZNode]] = {
-    zk(path).getChildren() map { zop =>
-      zop.children filter { child =>
+    zk(path).getChildren().map { zop =>
+      zop.children.toSeq.filter { child =>
         child.path.startsWith(shardPathPrefix)
       } sortBy (child => shardIdOf(child.path))
     }

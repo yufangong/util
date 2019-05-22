@@ -334,7 +334,7 @@ class ZkClientTest extends WordSpec with MockitoSugar {
       val retryPolicy = new RetryPolicy.Basic(retries)
 
       "withAcl" in {
-        val transformed = zkClient.withAcl(acl)
+        val transformed = zkClient.withAcl(acl.toSeq)
         try {
           transformed.asInstanceOf[ZkClient]
         } catch {
@@ -378,7 +378,7 @@ class ZkClientTest extends WordSpec with MockitoSugar {
       }
 
       "chained" in {
-        val transformed = zkClient.withAcl(acl).withMode(mode).withRetryPolicy(retryPolicy)
+        val transformed = zkClient.withAcl(acl.toSeq).withMode(mode).withRetryPolicy(retryPolicy)
         try {
           transformed.asInstanceOf[ZkClient]
         } catch {
@@ -597,7 +597,7 @@ class ZkClientTest extends WordSpec with MockitoSugar {
             )
             offer.sync()
             intercept[KeeperException.NoNodeException] {
-              offer syncWait () get ()
+              offer.syncWait().get
             }
             assert(offer.sync().isDefined == false)
           }
@@ -682,7 +682,7 @@ class ZkClientTest extends WordSpec with MockitoSugar {
 
         val update = znode.getChildren.monitor()
         results foreach { result =>
-          val r = update syncWait () get ()
+          val r = update.syncWait().get
           assert(r.path == result.path)
         }
       }
@@ -822,7 +822,7 @@ class ZkClientTest extends WordSpec with MockitoSugar {
 
         val offer = treeRoot.monitorTree()
         treeChildren foreach { _ =>
-          val ztu = Await.result(offer sync (), 1.second)
+          val ztu = Await.result(offer.sync, 1.second)
           val e = expectedByPath(ztu.parent.path)
           assert(ztu.parent.path == e.parent.path)
           assert(ztu.added.map { _.path } == e.added.map { _.path }.toSet)
@@ -835,7 +835,7 @@ class ZkClientTest extends WordSpec with MockitoSugar {
 
         updateTree foreach { z =>
           updatePromises get (z.path) foreach { _.setValue(event(z.path)) }
-          val ztu = Await.result(offer sync (), 1.second)
+          val ztu = Await.result(offer.sync, 1.second)
           val e = updatesByPath(z.path)
           assert(ztu.parent.path == e.parent.path)
           assert(ztu.added.map { _.path } == e.added.map { _.path }.toSet)
@@ -862,7 +862,7 @@ class ZkClientTest extends WordSpec with MockitoSugar {
         val offer = treeRoot.monitorTree()
         intercept[TimeoutException] {
           treeChildren foreach { _ =>
-            val ztu = Await.result(offer sync (), 1.second)
+            val ztu = Await.result(offer.sync, 1.second)
             val e = expectedByPath(ztu.parent.path)
             assert(ztu.parent == e.parent)
             assert(ztu.added.map { _.path } == e.added.map { _.path }.toSet)

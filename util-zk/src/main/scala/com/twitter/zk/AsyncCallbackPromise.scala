@@ -29,7 +29,7 @@ class StringCallbackPromise extends AsyncCallbackPromise[String] with AsyncCallb
 
 class UnitCallbackPromise extends AsyncCallbackPromise[Unit] with AsyncCallback.VoidCallback {
   def processResult(rc: Int, path: String, ctx: AnyRef): Unit = {
-    process(rc, path) { Unit }
+    process(rc, path) { () }
   }
 }
 
