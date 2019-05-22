@@ -43,7 +43,7 @@ class StatsReceiverTest extends FunSuite {
     assert(c2.c == 1)
 
     class MemStat extends Stat {
-      var values: Seq[Float] = ArrayBuffer.empty[Float]
+      var values: Seq[Float] = ArrayBuffer.empty[Float].toSeq
       def add(f: Float): Unit = { values = values :+ f }
     }
     val s1 = new MemStat

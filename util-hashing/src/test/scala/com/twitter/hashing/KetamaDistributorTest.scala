@@ -83,9 +83,9 @@ class KetamaDistributorTest extends WordSpec with GeneratorDrivenPropertyChecks 
       forAll(Gen.chooseNum(0, Int.MaxValue)) { i =>
         val md = MessageDigest.getInstance("MD5")
         ketama.hashInt(i, md)
-        val array = md.digest()
+        val array: Array[Byte] = md.digest()
 
-        assert(array.deep == md.digest(i.toString.getBytes("UTF-8")).deep)
+        assert(array.toIndexedSeq == md.digest(i.toString.getBytes("UTF-8")).toIndexedSeq)
       }
     }
 

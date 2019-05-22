@@ -58,7 +58,7 @@ private[app] sealed abstract class ClassPath[CpInfo <: ClassPath.Info] {
       browseUri0(uri, loader, buf, seenUris)
       seenUris += uri
     }
-    buf
+    buf.toSeq
   }
 
   // package protected for testing
@@ -81,7 +81,7 @@ private[app] sealed abstract class ClassPath[CpInfo <: ClassPath.Info] {
       case _ =>
     }
 
-    ents
+    ents.toSeq
   }
 
   // package protected for testing
@@ -168,7 +168,7 @@ private[app] sealed abstract class ClassPath[CpInfo <: ClassPath.Info] {
     for {
       m <- Option(manifest).toSeq
       attr <- Option(m.getMainAttributes.getValue("Class-Path")).toSeq
-      el <- attr.split(" ")
+      el <- attr.split(" ").toSeq
       uri <- uriFromJarClasspath(jarFile, el)
     } yield uri
 

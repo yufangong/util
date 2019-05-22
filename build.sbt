@@ -287,7 +287,7 @@ lazy val utilIntellij = Project(
   baseSettings
 ).settings(
   name := "util-intellij",
-  scalaVersion := "2.11.12"
+  scalaVersion := "2.13.0-RC1"
 ).dependsOn(utilCore % "test")
 
 lazy val utilJvm = Project(
