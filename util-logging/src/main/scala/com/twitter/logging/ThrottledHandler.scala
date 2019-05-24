@@ -124,7 +124,7 @@ class ThrottledHandler(handler: Handler, val duration: Duration, val maxToDispla
    */
   def flushThrottled(): Unit = {
     val now = Time.now
-    throttleMap.asScala.retain {
+    throttleMap.asScala.filterInPlace {
       case (_, throttle) => !throttle.removeIfExpired(now)
     }
   }

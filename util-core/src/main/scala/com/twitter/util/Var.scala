@@ -9,6 +9,7 @@ import scala.collection.immutable
 import scala.collection.mutable.Buffer
 import scala.language.higherKinds
 import scala.reflect.ClassTag
+import scala.Iterable
 
 /**
  * Vars are values that vary over time. To create one, you must give it an
@@ -296,7 +297,7 @@ object Var {
    *  // refCollectIndependent == Vector((1,2), (2,2), (2,4))
    * }}}
    */
-  def collect[T: ClassTag, CC[X] <: Traversable[X]](
+  def collect[T: ClassTag, CC[X] <: Iterable[X]](
     vars: CC[Var[T]]
   )(
     implicit newBuilder: CanBuildFrom[CC[T], T, CC[T]]
@@ -344,7 +345,7 @@ object Var {
    *  // refCollectIndependent == Vector((1,2), (2,2), (2,4))
    * }}}
    */
-  def collectIndependent[T: ClassTag, CC[X] <: Traversable[X]](
+  def collectIndependent[T: ClassTag, CC[X] <: Iterable[X]](
     vars: CC[Var[T]]
   )(
     implicit newBuilder: CanBuildFrom[CC[T], T, CC[T]]

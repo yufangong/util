@@ -118,7 +118,7 @@ private[util] class BatchExecutor[In, Out](
   def flushBatch(): () => Unit = {
     // this must be executed within a `synchronized` block.
     val prevBatch = new mutable.ArrayBuffer[(In, Promise[Out])](buf.length)
-    buf.copyToBuffer(prevBatch)
+    prevBatch ++= buf
     buf.clear()
 
     scheduled foreach { _.cancel() }

@@ -1143,7 +1143,7 @@ def join[%s](%s): Future[(%s)] = join(Seq(%s)).map { _ => (%s) }""".format(
     else {
       val (keys, values) = fs.toSeq.unzip
       Future.collect(values).map { seq =>
-        keys.zip(seq)(scala.collection.breakOut): Map[A, B]
+        keys.iterator.zip(seq.iterator)(scala.collection.breakOut): Map[A, B]
       }
     }
 

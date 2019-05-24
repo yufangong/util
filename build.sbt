@@ -37,6 +37,10 @@ val baseSettings = Seq(
     "org.scalatest" %% "scalatest" % "3.0.0" % "test"
   ),
 
+  scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.0.0",
+  addCompilerPlugin(scalafixSemanticdb),
+  scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on"),
+
   ScoverageKeys.coverageHighlighting := true,
   resolvers +=
     "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
