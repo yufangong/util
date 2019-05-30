@@ -21,7 +21,7 @@ val scalacheckLib = "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
 val slf4jApi = "org.slf4j" % "slf4j-api" % slf4jVersion
 
 val defaultProjectSettings = Seq(
-  scalaVersion := "2.13.0-RC1"
+  scalaVersion := "2.13.0-RC3"
 )
 
 val baseSettings = Seq(
@@ -33,7 +33,7 @@ val baseSettings = Seq(
     // See https://www.scala-sbt.org/0.13/docs/Testing.html#JUnit
     "com.novocode" % "junit-interface" % "0.11" % "test",
     "org.mockito" % "mockito-all" % "1.10.19" % "test",
-    "org.scalatest" %% "scalatest" % "3.0.8-RC2" % "test"
+    "org.scalatest" %% "scalatest" % "3.0.8-RC5" % "test"
   ),
 
   ScoverageKeys.coverageHighlighting := true,
@@ -287,7 +287,7 @@ lazy val utilIntellij = Project(
   baseSettings
 ).settings(
   name := "util-intellij",
-  scalaVersion := "2.13.0-RC1"
+  scalaVersion := "2.13.0-RC3"
 ).dependsOn(utilCore % "test")
 
 lazy val utilJvm = Project(
@@ -378,7 +378,7 @@ lazy val utilTest = Project(
 ).settings(
   name := "util-test",
   libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest" % "3.0.8-RC2",
+    "org.scalatest" %% "scalatest" % "3.0.8-RC5",
     "org.mockito" % "mockito-all" % "1.10.19"
   )
 ).dependsOn(utilCore, utilLogging)
@@ -408,7 +408,7 @@ lazy val utilTunable = Project(
   libraryDependencies ++= Seq(
     "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-    "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion exclude("com.google.guava", "guava")
+    "com.fasterxml.jackson.module" % "jackson-module-scala_2.13.0-RC1" % jacksonVersion exclude("com.google.guava", "guava")
   )
 ).dependsOn(utilApp, utilCore)
 

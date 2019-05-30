@@ -54,8 +54,7 @@ public class BufCompilationTest {
     Buf empty = Buf.Empty();
     Buf abc = Bufs.utf8Buf("abc");
     Buf def = Bufs.utf8Buf("def");
-    Buf merged = Buf.apply(
-        CollectionConverters.asScala(Arrays.asList(empty, abc, def)));
+
   }
 
   @Test
