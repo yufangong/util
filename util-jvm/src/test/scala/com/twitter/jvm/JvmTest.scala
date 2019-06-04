@@ -3,9 +3,12 @@ package com.twitter.jvm
 import com.twitter.conversions.DurationOps._
 import com.twitter.logging.{Level, TestLogging}
 import com.twitter.util.Time
+import org.junit.runner.RunWith
 import org.scalatest.WordSpec
+import org.scalatest.junit.JUnitRunner
 import scala.collection.mutable
 
+@RunWith(classOf[JUnitRunner])
 class JvmTest extends WordSpec with TestLogging {
   "Jvm" should {
     class JvmHelper {
@@ -60,7 +63,7 @@ class JvmTest extends WordSpec with TestLogging {
         assert(jvm.executor.schedules == List())
         jvm foreachGc { b += _ }
         assert(jvm.executor.schedules.size == 1)
-        val Seq((r: Runnable, _, _, _)) = jvm.executor.schedules
+        val mutable.Buffer((r, _, _, _)) = jvm.executor.schedules
         r.run()
         assert(b == List())
         val gc = Gc(0, "pcopy", Time.now, 1.millisecond)
@@ -97,7 +100,7 @@ class JvmTest extends WordSpec with TestLogging {
           jvm foreachGc { _ => /*ignore*/
           }
           assert(jvm.executor.schedules.size == 1)
-          val Seq((r: Runnable, _, _, _)) = jvm.executor.schedules
+          val mutable.Buffer((r, _, _, _)) = jvm.executor.schedules
           val gc = Gc(0, "pcopy", Time.now, 1.millisecond)
           r.run()
           jvm.pushGc(gc)
@@ -130,7 +133,7 @@ class JvmTest extends WordSpec with TestLogging {
 
         val query = jvm.monitorGcs(10.seconds)
         assert(jvm.executor.schedules.size == 1)
-        val Seq((r: Runnable, _, _, _)) = jvm.executor.schedules
+        val mutable.Buffer((r, _, _, _)) = jvm.executor.schedules
         val gc0 = Gc(0, "pcopy", Time.now, 1.millisecond)
         val gc1 = Gc(1, "CMS", Time.now, 1.millisecond)
         jvm.pushGc(gc1)
